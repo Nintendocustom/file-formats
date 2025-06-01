@@ -7,7 +7,7 @@ for this format appears to be "FUSE," as indicated by the magic.
 These files serve as containers for multiple individual files, which can be stored uncompressed or compressed. A `.csv` file is often alongside the `.fib` file and contains actual filenames for the hashed entries within the FIB's File
 System Table.
 
-### File Structure (Version 1)
+### File Structure
 
 The FIB file is structured as follows. All multibyte integers are **Little-Endian** unless otherwise specified.
 
@@ -69,9 +69,15 @@ Each file's data is stored contiguously in the "File Data Blocks" section of the
 If `Compression Type` is `UNCOMPRESSED`, the data block contains the raw file data, and its length is equal to `Decompressed File Size`.
 If `Compression Type` is `COMPRESSED`, the data block compressed.
 
-### Compression Types (Version 1)
+#### Compressed Blocks
+
+* **V1:** The compressed data block starts with a 3-byte (24-bit) little-endian unsigned integer indicating the decompressed chunk size, followed by 1 byte for the compression type (same as in the FST entry). The compressed data follows immediately after.
+* **V2:** The compressed data block starts with a 4-byte (32-bit) little-endian unsigned integer indicating the decompressed chunk size. The compressed data follows immediately after.
+
+See the "Compressions" section for details on the compression algorithm.
 The `Compression Type` byte in the V1 FST entry can have the following values:
 
+### Compression Types (Version 1)
 | Value | Name           | Description                                  |
 |:------|:---------------|:---------------------------------------------|
 | 0x00  | `UNCOMPRESSED` | The file data is stored raw.                 |
@@ -90,7 +96,7 @@ The 5-bit `Compression Type` extracted from the V2 FST entry can have the follow
 
 ---
 
-### Companion CSV File
+### CSV File
 
 * FIB files often come with an external `.csv` file (e.g., `archive.fib` would use `archive.csv`) to map `Filename Hash`
   values to human-readable filenames.
@@ -108,5 +114,14 @@ The 5-bit `Compression Type` extracted from the V2 FST entry can have the follow
   0x70f02c44,models/textures/pc02_brooklynbridge.btga,46404,87352,0x00017257
   0xf33f098b,models/textures/pc03_spaceneedle.btga,44170,87352,0x00017257
   ```
+  
+### Compressions
+
+FIB files use a custom LZ77-based compression algorithm.
+An implementation of the algorithm can be found in the [quickbms source code](https://github.com/LittleBigBug/QuickBMS/blob/5315ffe664b88dc09ae783ad17d9dfd252b1c927/src/included/unrfpk.c#L5).
+Note: This implementation only applies to Version 1 - Version 2 uses a slightly different method.
+
+---
+
 * **Note:**
-    * Files with a `Decompressed File Size` of 0 should generally be skipped during extraction and considered as empty/placeholder entries.
+  * Files with a `Decompressed File Size` of 0 should generally be skipped during extraction and considered as empty/placeholder entries.
