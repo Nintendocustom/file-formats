@@ -1,6 +1,6 @@
 ## FIB (FUSE) File Format
 
-This document describes the structure of FIB (`.fib`) files, an archive format primarily associated with **TT Fusion**
+In the following the structure of FIB (`.fib`) files is described, an archive format primarily associated with **TT Fusion**
 for their LEGO handheld games, such as *LEGO City Undercover: The Chase Begins* for the Nintendo 3DS. The internal name
 for this format appears to be "FUSE," as indicated by the magic.
 
@@ -13,7 +13,7 @@ The FIB file is structured as follows. All multibyte integers are **Little-Endia
 
 | Offset                | Size (bytes)     | Description                        | Notes                                                                                                |
 |:----------------------|:-----------------|:-----------------------------------|:-----------------------------------------------------------------------------------------------------|
-| 0x0                   | 8                | Magic Number                       | Always `FUSE1.00` (ASCII encoded)                                                                    |
+| 0x0                   | 8                | Magic                              | Always `FUSE1.00` (ASCII encoded)                                                                    |
 | 0x8                   | 4                | Number of Files (`num_files`)      | Unsigned 4-byte integer. Total files in the archive                                                  |
 | 0xC                   | 4                | Unknown (Zeros)                    | Typically observed as all zeros                                                                      |
 | 0x10                  | 4                | FST Offset (`start_of_fst_offset`) | Unsigned 4-byte integer. Offset from the beginning of the file to the start of the File System Table |
@@ -46,7 +46,7 @@ Entries within the FST block in the file are **sorted in ascending order by thei
 This 4-byte field (read as an unsigned 32-bit Little-Endian integer, `num`) is interpreted as:
 
 * **Compression Type:** The lower 5 bits of `num`.
-  `compression_type = num & 0x1F` (where `0x1F` is `(1 << 5) - 1`)
+  `compression_type = num & 0x1F`
 * **Decompressed File Size:** The upper 27 bits of `num`.
   `decompressed_size = num >> 5`
 
@@ -60,7 +60,7 @@ observed is:
 
 Each file's data is stored contiguously in the "File Data Blocks" section of the FIB file.
 *   The **offset** for a specific file's data is given by its `File Data Offset` in its FST entry.
-*   The **compressed size** of a file is not explicitly stored per entry. It is calculated by:
+*   The **compressed size** of a file is not explicitly stored per entry. It can be calculated by:
     *   For all but the last file (when sorted by `File Data Offset`): `(Next File's Data Offset) - (Current File's Data Offset)`
     *   For the last file (when sorted by `File Data Offset`): `(FST Offset) - (Current File's Data Offset)`
     *   *(Note: This requires FST entries to be sorted by `File Data Offset` for calculation, though they are stored sorted by `Filename Hash` in the FST block itself.)*
@@ -78,10 +78,10 @@ See the "Compressions" section for details on the compression algorithm.
 The `Compression Type` byte in the V1 FST entry can have the following values:
 
 ### Compression Types (Version 1)
-| Value | Name           | Description                                  |
-|:------|:---------------|:---------------------------------------------|
-| 0x00  | `UNCOMPRESSED` | The file data is stored raw.                 |
-| 0x40  | `COMPRESSED`   | The file data is RFPK compressed (V1 style). |
+| Value | Name           | Description                                 |
+|:------|:---------------|:--------------------------------------------|
+| 0x00  | `UNCOMPRESSED` | The file data is stored raw                 |
+| 0x40  | `COMPRESSED`   | The file data is RFPK compressed (V1 style) |
 
 
 ### Compression Types (Version 2)
