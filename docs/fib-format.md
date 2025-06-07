@@ -115,7 +115,7 @@ The 5-bit `Compression Type` extracted from the V2 FST entry can have the follow
   0xf33f098b,models/textures/pc03_spaceneedle.btga,44170,87352,0x00017257
   ```
   
-### Compressions
+### Compression
 
 FIB files use a custom LZ77-based compression algorithm.
 An implementation of the algorithm can be found in the [quickbms source code](https://github.com/LittleBigBug/QuickBMS/blob/5315ffe664b88dc09ae783ad17d9dfd252b1c927/src/included/unrfpk.c#L5).
