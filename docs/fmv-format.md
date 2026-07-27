@@ -35,9 +35,9 @@ supported. Each audio track header is 12 bytes long.
 |:-------|:-------------|:-----------------|:----------------------------|
 | 0x0    | 4            | Sample Rate (Hz) | The sample rate in Hz       |
 | 0x4    | 1            | Format Type      | 0 = PCM, 1 = ADPCM          |
-| 0x8    | 1            | Track ID         | Corresponds to the language |
-| 0xB    | 1            | Channels         | Possible are 1, 2, 6, 8     |
-| 0xB    | 1            | Bits per Sample  | Either 8 or 16 bits         |
+| 0x5    | 1            | Track ID         | Corresponds to the language |
+| 0x6    | 1            | Channels         | Possible are 1, 2, 6, 8     |
+| 0x7    | 1            | Bits per Sample  | Either 8 or 16 bits         |
 
 ### Chunk-Types
 
@@ -66,7 +66,7 @@ The chunk data follows immediately after.
 | 0    | Skip, the macroblock is idenitcal to the previous frame           |
 | 1    | Motion, the macroblock is a motion vector from the previous frame |
 | 2    | Fill, the macroblock is filled with a single color                |
-| 255  | Coded, replaces pxiesl                                            |
+| 255  | Coded, replaces pxies                                             |
 
 ### Looping
 There is no explicit looping information in the FMV file. Looping is handled by the game engine, which can loop the
