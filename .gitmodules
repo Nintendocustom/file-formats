@@ -1,0 +1,3 @@
+[submodule "docs/Kestrel-Gizmo"]
+	path = docs/Kestrel-Gizmo
+	url = https://github.com/Kippie148/Kestrel-Gizmo-Tools-Addon.git
