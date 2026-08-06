@@ -1,0 +1,20 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "config:recommended",
+        ":disableDependencyDashboard"
+    ],
+    "git-submodules": {
+        "enabled": true
+    },
+    "packageRules": [
+        {
+            "matchManagers": [
+                "git-submodules"
+            ],
+            "automerge": true,
+            "automergeType": "pr",
+            "platformAutomerge": true
+        }
+    ]
+}
