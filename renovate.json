@@ -15,7 +15,6 @@
             "automerge": true,
             "automergeType": "pr",
             "automergeStrategy": "squash",
-            "platformAutomerge": true,
             "ignoreTests": true
         }
     ]
